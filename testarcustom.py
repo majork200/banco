@@ -1,24 +1,37 @@
 from tkinter import *
 import psycopg2
-import os
 
-class interface:
-    def __init__(self,app):
+def obter_dados_e_preencher_lista():
+    try:
+        conn = psycopg2.connect(
+            dbname="cadastropy",
+            user="postgres",
+            password="192003",
+            host="localhost",
+            port="5433"
+        )
+        cursor = conn.cursor()
 
-        pastaapp = os.path.dirname(__file__)
+        cursor.execute("SELECT nome, preco FROM eletronicos")
+        dados = cursor.fetchall()
 
-        imageteste = PhotoImage(file=pastaapp+"\\download.gif")
+        root = Tk()
+        root.title("Lista de Dados SQL")
 
-        self.btnaperte = Button(app,image=imageteste)
-    
-    
+        listbox = Listbox(root, height=10, width=40)
+        scrollbar = Scrollbar(root, orient="vertical", command=listbox.yview)
 
+        listbox.config(yscrollcommand=scrollbar.set)
 
-janela = Tk()
-app = interface(janela)
+        listbox.grid(row=0, column=0, padx=10, pady=10)
+        scrollbar.grid(row=0, column=1, sticky="ns", pady=10)
 
-janela.geometry("400x500")
-janela.iconbitmap("5309792.png")
-janela.configure(background="#151515")
-janela.configure()
-janela.mainloop()
+        for dado in dados:
+            listbox.insert(END, f"Nome: {dado[0]}, Preço: {dado[1]}")
+
+        root.mainloop()
+
+    except psycopg2.Error as e:
+        print(f"Erro ao obter dados do SQL: {e}")
+
+obter_dados_e_preencher_lista()

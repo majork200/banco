@@ -10,4 +10,4 @@ cursor = conn.cursor()
 cursor.execute("DROP TABLE IF EXISTS eletronicos")
 print("Tabela excluída")
 conn.commit()
-#esse aki deleta as tabelas que criei
+#Deteletar tababelas Existentes

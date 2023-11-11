@@ -8,42 +8,44 @@ class PrincipalBD:
         self.objr = MyApp()
         
 
-     # Configuração da interface Tkinter
-        self.label_codigo = Label(win, text="Código:")
+     # Configuração da interface Tkinter 
+        self.label_codigo = Label(win, text="Código:",background="#0A1B2A",foreground="#FFFFFF")
         self.label_codigo.grid(row=0, column=0,padx=50,pady=20)
-        self.entry_codigo = Entry(win)
+        self.entry_codigo = Entry(win,background="#5882FA",foreground="#FFFFFF")
         self.entry_codigo.grid(row=0, column=1,padx=50,pady=20)
 
-        self.label_nome = Label(win, text="Nome:")
+        self.label_nome = Label(win, text="Nome:",background="#0A1B2A",foreground="#FFFFFF")
         self.label_nome.grid(row=1, column=0,padx=50,pady=20)
-        self.entry_nome = Entry(win)
+        self.entry_nome = Entry(win,background="#5882FA",foreground="#FFFFFF")
         self.entry_nome.grid(row=1, column=1,padx=50,pady=20)
 
-        self.label_preco = Label(win, text="Preço:")
+        self.label_preco = Label(win, text="Preço:",background="#0A1B2A",foreground="#FFFFFF")
         self.label_preco.grid(row=2, column=0,padx=50,pady=20)
-        self.entry_preco = Entry(win)
+        self.entry_preco = Entry(win,background="#5882FA",foreground="#FFFFFF")
         self.entry_preco.grid(row=2, column=1,padx=50,pady=20)
 
-        self.btn_cadastrar = Button(win, text="Cadastrar", command=self.cadastrar)
+        self.btn_cadastrar = Button(win, text="Cadastrar", command=self.cadastrar,background="#FF8000")
         self.btn_cadastrar.grid(row=3,column=0)
 
-        self.btn_addjuros = Button(win,text= "juros",command=self.juros)
-        self.btn_addjuros.grid(row=4,column=0)
+        self.btn_addjuros = Button(win,text= "juros",command=self.juros,background="#FF8000")
+        self.btn_addjuros.grid(row=4,column=0,pady=20,ipadx=10)
 
-        self.btn_addtabela = Button(win,text= "tabela",command=self.rtabela)
-        self.btn_addtabela.grid(row=4,column=1,pady=20)
+        #teste para mostra lista sql terminar dps
+        #self.btn_addtabela = Button(win,text= "tabela",command=self.rtabela)
+        #self.btn_addtabela.grid(row=4,column=1,pady=20)
 
 
-        self.btn_atualizar = Button(win, text="Atualizar", command=self.atualizar)
+        self.btn_atualizar = Button(win, text="Atualizar", command=self.atualizar,background="#FF8000")
         self.btn_atualizar.grid(row=3, column=1)
 
-        self.btn_excluir = Button(win, text="Excluir", command=self.excluir)
+        self.btn_excluir = Button(win, text="Excluir", command=self.excluir,background="#FF8000")
         self.btn_excluir.grid(row=3, column=2)
 
     # Funções para manipular a interface Tkinter
-
+    
+    #rtabela em teste terminar dps
     def rtabela(self):
-        self.objr.resultados()
+        self.obj.resultados()
 
     def cadastrar(self):  
         self.nome = self.entry_nome.get()
@@ -122,6 +124,37 @@ class AppBD:
        except psycopg2.Error as erros:
            self.conn.rollback()
            print(f"Erro ao atualizar dados: {erros}")
+    #resultados em teste terminar dps
+    def resultados(self):
+        try:
+            # Consulta SQL para obter dados (substitua com sua própria consulta)
+            self.cursor.execute("SELECT nome, preco FROM eletronicos")
+            dados = self.cursor.fetchall()
+
+            # Criar janela de resultados
+            tjanela = Tk()
+            tjanela.title("Tabela de Resultados")
+
+            # Criar widget Listbox e Scrollbar
+            listbox = Listbox(tjanela, height=10, width=40)
+            scrollbar = Scrollbar(tjanela, orient="vertical", command=listbox.yview)
+
+            # Configurar a relação entre Listbox e Scrollbar
+            listbox.config(yscrollcommand=scrollbar.set)
+
+            # Colocar Listbox e Scrollbar na janela
+            listbox.grid(row=0, column=0, padx=10, pady=10)
+            scrollbar.grid(row=0, column=1, sticky="ns", pady=10)
+
+            # Preencher a lista com dados do SQL
+            for dado in dados:
+                listbox.insert(END, f"Nome: {dado[0]}, Preço: {dado[1]}")
+
+            # Iniciar loop principal
+            tjanela.mainloop()
+
+        except psycopg2.Error as e:
+            print(f"Erro ao obter dados do SQL: {e}")
 
 
 
@@ -164,24 +197,17 @@ class AppBD:
 
 
 
-class MyApp():
+class MyApp:
     def __init__(self):
-        super().__init__()
+        pass
 
     def app(self):
-         #Programa principal
+        # Programa principal
         self.janela = Tk()
         self.janela.title("Cadastro de eletronicos")
-        self.janela.geometry("600x400")
+        self.janela.geometry("450x300")
+        self.janela.configure(background="#0A1B2A")
 
         PrincipalBD(self.janela)
 
         self.janela.mainloop()
-        pass
-    def resultados(self):
-
-        self.janela_result = Tk()
-        self.janela_result.title("resultado")
-        self.janela_result.mainloop()
-
-        pass
