@@ -19,6 +19,7 @@ class PrincipalBD:
         self.entry_nome = Entry(win,background="#5882FA",foreground="#FFFFFF")
         self.entry_nome.grid(row=1, column=1,padx=50,pady=20)
 
+
         self.label_preco = Label(win, text="Preço:",background="#0A1B2A",foreground="#FFFFFF")
         self.label_preco.grid(row=2, column=0,padx=50,pady=20)
         self.entry_preco = Entry(win,background="#5882FA",foreground="#FFFFFF")
@@ -31,8 +32,8 @@ class PrincipalBD:
         self.btn_addjuros.grid(row=4,column=0,pady=20,ipadx=10)
 
         #teste para mostra lista sql terminar dps
-        #self.btn_addtabela = Button(win,text= "tabela",command=self.rtabela)
-        #self.btn_addtabela.grid(row=4,column=1,pady=20)
+        self.btn_addtabela = Button(win,text= "tabela",command=self.rtabela)
+        self.btn_addtabela.grid(row=4,column=1,pady=20)
 
 
         self.btn_atualizar = Button(win, text="Atualizar", command=self.atualizar,background="#FF8000")
@@ -124,37 +125,31 @@ class AppBD:
        except psycopg2.Error as erros:
            self.conn.rollback()
            print(f"Erro ao atualizar dados: {erros}")
+    
+    
     #resultados em teste terminar dps
+
     def resultados(self):
-        try:
-            # Consulta SQL para obter dados (substitua com sua própria consulta)
-            self.cursor.execute("SELECT nome, preco FROM eletronicos")
-            dados = self.cursor.fetchall()
+       try:
+           self.cursor.execute("SELECT nome, preco FROM eletronicos")
+           dados = self.cursor.fetchall()
 
-            # Criar janela de resultados
-            tjanela = Tk()
-            tjanela.title("Tabela de Resultados")
+           self.nwin = Tk()
+           self.nwin.title("Resultados do SQL")
+           self.nwin.geometry("300x300")
 
-            # Criar widget Listbox e Scrollbar
-            listbox = Listbox(tjanela, height=10, width=40)
-            scrollbar = Scrollbar(tjanela, orient="vertical", command=listbox.yview)
+           text_widget = Text(self.nwin, wrap="word")
+           text_widget.grid(row=0, column=0, padx=10, pady=10)
 
-            # Configurar a relação entre Listbox e Scrollbar
-            listbox.config(yscrollcommand=scrollbar.set)
+           for dado in dados:
+               resultado_texto = f"Nome: {dado[0]}, Preço: {dado[1]}\n"
+               text_widget.insert(END, resultado_texto)
 
-            # Colocar Listbox e Scrollbar na janela
-            listbox.grid(row=0, column=0, padx=10, pady=10)
-            scrollbar.grid(row=0, column=1, sticky="ns", pady=10)
+           self.nwin.mainloop()
 
-            # Preencher a lista com dados do SQL
-            for dado in dados:
-                listbox.insert(END, f"Nome: {dado[0]}, Preço: {dado[1]}")
+       except psycopg2.Error as e:
+           print(f"Erro ao obter dados do SQL: {e}")
 
-            # Iniciar loop principal
-            tjanela.mainloop()
-
-        except psycopg2.Error as e:
-            print(f"Erro ao obter dados do SQL: {e}")
 
 
 
@@ -205,7 +200,7 @@ class MyApp:
         # Programa principal
         self.janela = Tk()
         self.janela.title("Cadastro de eletronicos")
-        self.janela.geometry("450x300")
+        self.janela.geometry("500x300")
         self.janela.configure(background="#0A1B2A")
 
         PrincipalBD(self.janela)
