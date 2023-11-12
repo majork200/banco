@@ -1,3 +1,6 @@
+#Aluno: Jhonathan William Matricula: 202202136956
+#Aluno: Gabriel Severo Paiva Matricula:202203600397
+
 from tkinter import *
 import psycopg2
 
@@ -46,7 +49,7 @@ class PrincipalBD:
 
     # Funções para manipular a interface Tkinter
     
-    #rtabela em teste terminar dps
+    #novo windowns a ser aplicado
     def rtabela(self):
         self.obj.resultados()
 
