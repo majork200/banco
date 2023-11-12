@@ -6,9 +6,9 @@ def obter_dados_e_preencher_lista():
         conn = psycopg2.connect(
             dbname="cadastropy",
             user="postgres",
-            password="192003",
+            password="gabriel789",
             host="localhost",
-            port="5433"
+            port="5432"
         )
         cursor = conn.cursor()
 
