@@ -5,7 +5,6 @@ class PrincipalBD:
     def __init__(self,win):
         self.win=win
         self.obj = AppBD()
-        self.objr = MyApp()
         
 
      # Configuração da interface Tkinter 
@@ -88,9 +87,9 @@ class AppBD:
         self.conn = psycopg2.connect(
         dbname="cadastropy",
         user="postgres",
-        password="gabriel789",
+        password="192003",
         host="localhost",
-        port="5432"
+        port="5433"
     )
         self.cursor = self.conn.cursor()
 
@@ -179,17 +178,13 @@ class AppBD:
 
 
 
-class MyApp:
-    def __init__(self):
-        pass
 
-    def app(self):
-        # Programa principal
-        self.janela = Tk()
-        self.janela.title("Cadastro de eletronicos")
-        self.janela.geometry("600x350")
-        self.janela.configure(background="#0A1B2A")
+ # Programa principal
+janela = Tk()
+janela.title("Cadastro de eletronicos")
+janela.geometry("600x350")
+janela.configure(background="#0A1B2A")
 
-        PrincipalBD(self.janela)
+PrincipalBD(janela)
 
-        self.janela.mainloop()
+janela.mainloop()
