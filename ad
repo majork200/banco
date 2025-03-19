@@ -1,0 +1,190 @@
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Alert,
+  FlatList,
+} from "react-native";
+
+export default function App() {
+  // Estado para controlar qual tela será exibida (login ou cadastro)
+  const [isLoginScreen, setIsLoginScreen] = useState(true);
+
+  // Estados para armazenar os dados do formulário
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmação de senha
+
+  // Lista de usuários cadastrados (simulação de banco de dados)
+  const [users, setUsers] = useState([]);
+
+  // Função que será chamada ao clicar no botão de login
+  const handleLogin = () => {
+    if (email === "" || password === "") {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    // Verifica se o usuário existe (simulação de login)
+    const userExists = users.some(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (userExists) {
+      Alert.alert("Sucesso", `Bem-vindo, ${email}!`);
+    } else {
+      Alert.alert("Erro", "Email ou senha incorretos");
+    }
+  };
+
+  // Função para registrar o usuário
+  const handleRegister = () => {
+    if (email === "" || password === "" || confirmPassword === "") {
+      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Erro", "As senhas não coincidem");
+      return;
+    }
+
+    // Adiciona o novo usuário à lista
+    const newUser = { email, password };
+    setUsers([...users, newUser]);
+    Alert.alert("Cadastro realizado!", `Bem-vindo, ${email}!`);
+
+    // Limpa os campos
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setIsLoginScreen(true); // Volta para a tela de login após o cadastro
+  };
+
+  return (
+    <View style={styles.container}>
+      {isLoginScreen ? (
+        // Tela de Login
+        <View style={styles.screen}>
+          <Text style={styles.title}>Tela de Login</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+          />
+
+          <Button title="Entrar" onPress={handleLogin} />
+
+          <Button
+            title="Cadastre-se"
+            onPress={() => setIsLoginScreen(false)} // Alterna para a tela de cadastro
+          />
+        </View>
+      ) : (
+        // Tela de Cadastro
+        <View style={styles.screen}>
+          <Text style={styles.title}>Tela de Cadastro</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Confirme a Senha"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={true}
+          />
+
+          <Button title="Cadastrar" onPress={handleRegister} />
+
+          <Button
+            title="voltar ao login"
+            onPress={() => setIsLoginScreen(true)} // Alterna para a tela de login
+          />
+        </View>
+      )}
+
+      {/* Exibe os usuários cadastrados */}
+      <View style={styles.usersContainer}>
+        <Text style={styles.usersTitle}>Usuários Cadastrados:</Text>
+        <FlatList
+          data={users}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Text style={styles.userItem}>{item.email}</Text>
+          )}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  screen: {
+    width: "100%",
+    padding: 20,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+  },
+  usersContainer: {
+    marginTop: 30,
+    width: "100%",
+    alignItems: "center",
+  },
+  usersTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  userItem: {
+    fontSize: 16,
+    marginVertical: 5,
+    color: "#333",
+  },
+});
