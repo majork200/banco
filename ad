@@ -10,25 +10,18 @@ import {
 } from "react-native";
 
 export default function App() {
-  // Estado para controlar qual tela será exibida (login ou cadastro)
   const [isLoginScreen, setIsLoginScreen] = useState(true);
-
-  // Estados para armazenar os dados do formulário
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmação de senha
-
-  // Lista de usuários cadastrados (simulação de banco de dados)
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [users, setUsers] = useState([]);
 
-  // Função que será chamada ao clicar no botão de login
   const handleLogin = () => {
     if (email === "" || password === "") {
       Alert.alert("Erro", "Por favor, preencha todos os campos");
       return;
     }
 
-    // Verifica se o usuário existe (simulação de login)
     const userExists = users.some(
       (user) => user.email === email && user.password === password
     );
@@ -40,7 +33,6 @@ export default function App() {
     }
   };
 
-  // Função para registrar o usuário
   const handleRegister = () => {
     if (email === "" || password === "" || confirmPassword === "") {
       Alert.alert("Erro", "Por favor, preencha todos os campos");
@@ -52,22 +44,19 @@ export default function App() {
       return;
     }
 
-    // Adiciona o novo usuário à lista
     const newUser = { email, password };
     setUsers([...users, newUser]);
     Alert.alert("Cadastro realizado!", `Bem-vindo, ${email}!`);
 
-    // Limpa os campos
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setIsLoginScreen(true); // Volta para a tela de login após o cadastro
+    setIsLoginScreen(true);
   };
 
   return (
     <View style={styles.container}>
       {isLoginScreen ? (
-        // Tela de Login
         <View style={styles.screen}>
           <Text style={styles.title}>Tela de Login</Text>
 
@@ -87,15 +76,17 @@ export default function App() {
             secureTextEntry={true}
           />
 
-          <Button title="Entrar" onPress={handleLogin} />
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttonSpacing}>
+              <Button title="Entrar" onPress={handleLogin} />
+            </View>
 
-          <Button
-            title="Cadastre-se"
-            onPress={() => setIsLoginScreen(false)} // Alterna para a tela de cadastro
-          />
+            <View style={styles.buttonSpacing}>
+              <Button title="Cadastre-se" onPress={() => setIsLoginScreen(false)} />
+            </View>
+          </View>
         </View>
       ) : (
-        // Tela de Cadastro
         <View style={styles.screen}>
           <Text style={styles.title}>Tela de Cadastro</Text>
 
@@ -123,16 +114,18 @@ export default function App() {
             secureTextEntry={true}
           />
 
-          <Button title="Cadastrar" onPress={handleRegister} />
+          <View style={styles.buttonContainer}>
+            <View style={styles.buttonSpacing}>
+              <Button title="Cadastrar" onPress={handleRegister} />
+            </View>
 
-          <Button
-            title="voltar ao login"
-            onPress={() => setIsLoginScreen(true)} // Alterna para a tela de login
-          />
+            <View style={styles.buttonSpacing}>
+              <Button title="Voltar ao Login" onPress={() => setIsLoginScreen(true)} />
+            </View>
+          </View>
         </View>
       )}
 
-      {/* Exibe os usuários cadastrados */}
       <View style={styles.usersContainer}>
         <Text style={styles.usersTitle}>Usuários Cadastrados:</Text>
         <FlatList
@@ -153,7 +146,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#E0FFFF",
   },
   screen: {
     width: "100%",
@@ -168,9 +161,17 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    borderWidth: 2,
+    borderColor: "#000",
     borderRadius: 5,
+  },
+  buttonContainer: {
+    width: "100%",
+    marginTop: 10,
+  },
+  buttonSpacing: {
+    marginVertical: 10,
+    alignItems: "center",
   },
   usersContainer: {
     marginTop: 30,
@@ -188,3 +189,4 @@ const styles = StyleSheet.create({
     color: "#333",
   },
 });
+
